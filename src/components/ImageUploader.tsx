@@ -24,13 +24,15 @@ export default function ImageUploader({ onUpload }: ImageUploaderProps) {
   }
 
   return (
-    <div>
+    <div className="mb-6">
       <input
         type="file"
         accept="image/*"
         onChange={handleUpload}
         disabled={loading}
+        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed"
       />
+      {loading && <p className="text-gray-600 mt-2">Loading...</p>}
     </div>
   );
 }

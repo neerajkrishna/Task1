@@ -38,34 +38,28 @@ function ImagesView() {
   });
 
   return (
-    <div style={{ padding: 32 }}>
-      <h1>User Images</h1>
+    <div className="p-8">
+      <h1 className="text-3xl font-bold mb-6">User Images</h1>
       <ImageUploader
         onUpload={() =>
           queryClient.invalidateQueries({ queryKey: ["images", USER_ID] })
         }
       />
-      <h2>All Uploaded Images</h2>
-      {isLoading && <p>Loading...</p>}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
+      <h2 className="text-2xl font-semibold mt-8 mb-4">All Uploaded Images</h2>
+      {isLoading && <p className="text-gray-600">Loading...</p>}
+      <div className="flex flex-wrap gap-4">
         {data?.map((img: { url: string; key: string }) => (
-          <div
-            key={img.key}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
+          <div key={img.key} className="flex flex-col items-center">
             <img
               src={img.url}
               alt="Uploaded"
-              style={{ maxWidth: 200, cursor: "pointer" }}
+              className="max-w-[200px] cursor-pointer hover:opacity-80 transition-opacity"
               onClick={() => setViewImage(img.url)}
             />
             <button
               onClick={() => deleteMutation.mutate(img.key)}
               disabled={deleteMutation.isPending}
+              className="mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Delete
             </button>
@@ -74,28 +68,13 @@ function ImagesView() {
       </div>
       {viewImage && (
         <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            background: "rgba(0,0,0,0.7)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 1000,
-          }}
+          className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
           onClick={() => setViewImage(null)}
         >
           <img
             src={viewImage}
             alt="Enlarged"
-            style={{
-              maxHeight: "90vh",
-              maxWidth: "90vw",
-              background: "white",
-            }}
+            className="max-h-[90vh] max-w-[90vw] bg-white object-contain"
           />
         </div>
       )}
