@@ -6,6 +6,8 @@ const WHITELISTED_IPS = ["20.218.226.24"];
 export function middleware(req: NextRequest) {
   const forwarded = req.headers.get("x-forwarded-for");
   const ip = forwarded?.split(",")[0]?.trim() || "";
+  console.log("from middleware")
+  console.log(ip);
   if (!WHITELISTED_IPS.includes(ip)) {
     return new NextResponse(`Access denied. ip:${ip}`, {
       status: 403,
