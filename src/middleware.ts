@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const WHITELISTED_IPS = ["20.218.226.24", "152.58.200.125"];
+const WHITELISTED_IPS = ["20.218.226.24", "37.201.117.4"];
 // "152.58.200.125"
 
 export function middleware(req: NextRequest) {
