@@ -93,26 +93,34 @@
 // }
 "use client";
 
-import ImageUploader from "../components//ImageUploader";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import ImageUploader from "../components/ImageUploader";
+import { USER_ID } from "../constants";
 
 export default function Page() {
   const queryClient = useQueryClient();
   const [viewImage, setViewImage] = useState<string | null>(null);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["images"],
     queryFn: async () => {
-      const res = await fetch("/api/images");
+      const res = await fetch(`/api/images?userId=${USER_ID}`);
+      if (!res.ok) {
+        throw new Error("Failed to fetch images");
+      }
       return res.json();
     },
   });
 
   const deleteMutation = useMutation({
     mutationFn: async (key: string) => {
-      await fetch(`/api/images?key=${key}`, {
+      await fetch(`/api/images`, {
         method: "DELETE",
+        body: JSON.stringify({ key }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
     },
     onSuccess: () => {
@@ -132,31 +140,34 @@ export default function Page() {
 
       {isLoading ? (
         <p className="text-gray-600">Loading...</p>
-      ) : data?.length === 0 ? (
+      ) : isError ? (
+        <p className="text-red-600">Failed to load images.</p>
+      ) : Array.isArray(data) && data.length === 0 ? (
         <p className="text-gray-500 italic">No images found.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {Array.isArray(data) && data.map((img: { url: string; key: string }) => (
-            <div
-              key={img.key}
-              className="relative bg-white rounded-xl shadow-md overflow-hidden group"
-            >
-              <img
-                src={img.url}
-                alt="Uploaded"
-                className="w-full h-48 object-cover transform group-hover:scale-105 transition-transform cursor-pointer"
-                onClick={() => setViewImage(img.url)}
-              />
-              <button
-                onClick={() => deleteMutation.mutate(img.key)}
-                disabled={deleteMutation.isPending}
-                className="absolute top-2 right-2 bg-red-500 p-2 rounded-full text-white hover:bg-red-600 transition-all disabled:opacity-50"
-                title="Delete Image"
+          {Array.isArray(data) &&
+            data.map((img: { url: string; key: string }) => (
+              <div
+                key={img.key}
+                className="relative bg-white rounded-xl shadow-md overflow-hidden group"
               >
-                🗑️
-              </button>
-            </div>
-          ))}
+                <img
+                  src={img.url}
+                  alt="Uploaded"
+                  className="w-full h-48 object-cover transform group-hover:scale-105 transition-transform cursor-pointer"
+                  onClick={() => setViewImage(img.url)}
+                />
+                <button
+                  onClick={() => deleteMutation.mutate(img.key)}
+                  disabled={deleteMutation.isPending}
+                  className="absolute top-2 right-2 bg-red-500 p-2 rounded-full text-white hover:bg-red-600 transition-all disabled:opacity-50"
+                  title="Delete Image"
+                >
+                  🗑️
+                </button>
+              </div>
+            ))}
         </div>
       )}
 
@@ -175,3 +186,4 @@ export default function Page() {
     </div>
   );
 }
+
