@@ -136,7 +136,7 @@ export default function Page() {
         <p className="text-gray-500 italic">No images found.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {data?.map((img: { url: string; key: string }) => (
+          {Array.isArray(data) && data.map((img: { url: string; key: string }) => (
             <div
               key={img.key}
               className="relative bg-white rounded-xl shadow-md overflow-hidden group"

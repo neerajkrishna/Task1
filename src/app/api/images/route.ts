@@ -43,7 +43,7 @@ export async function GET(request: Request) {
     url: blob.url,
     key: blob.pathname,
   }));
-  return new Response(JSON.stringify({ images }), {
+  return new Response(JSON.stringify(images), {
     status: 200,
     headers: { "Content-Type": "application/json" },
   });
