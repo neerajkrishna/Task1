@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Web Image Upload App (PCG Pentest Challenge Task 1)
 
-## Getting Started
+This is a [Next.js](https://nextjs.org) application that allows users to upload and delete images. Access to the application is restricted to a specific whitelisted IP.
 
-First, run the development server:
+Live URL: [https://task1-zeta-nine.vercel.app](https://task1-zeta-nine.vercel.app) *(VPN IP access only)*
+
+---
+
+## 🚀 Features
+
+- Upload and delete images via a clean UI
+- Backend image handling via [Vercel Blob Storage](https://vercel.com/docs/storage/vercel-blob)
+- Deployed using [Vercel Hosting Platform](https://vercel.com)
+- IP whitelisting middleware (`20.218.226.24` only)
+- Tailwind CSS for styling
+- React Query for efficient data fetching
+
+---
+
+## 🧪 Getting Started
+
+Run the development server:
 
 ```bash
+pnpm dev
+# or
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📁 Important Files
 
-## Learn More
+- `app/page.tsx` – Main UI
+- `components/ImageUploader.tsx` – Upload form component
+- `middleware.ts` – IP restriction middleware
+- `route.ts` – Handles GET/POST/DELETE image requests securely
+- `Providers.tsx` – React Query and Session providers
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔐 Access Control
+This app is restricted to:
+- VPN IP: `20.218.226.24`
+- All other IPs will receive `403 Forbidden`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 📦 Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The app is deployed to Vercel:
+[https://task1-zeta-nine.vercel.app](https://task1-zeta-nine.vercel.app)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+To deploy:
+- Commit to GitHub
+- Connect repository to [Vercel](https://vercel.com)
+- Deploy automatically
+
+---
+
+## 🛡️ Challenge Submission
+This app fulfills **Challenge 1** of the PCG Pentest Squad trainee assignment:
+- ✅ Upload & delete image functionality
+- ✅ GitHub repo shared
+- ✅ IP whitelist middleware implemented
+- ✅ Accessible live link using Vercel + Vercel Blob Storage
