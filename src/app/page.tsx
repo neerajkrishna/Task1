@@ -64,10 +64,10 @@ export default function Page() {
                 <button
                   onClick={() => deleteMutation.mutate(img.key)}
                   disabled={deleteMutation.isPending}
-                  className="absolute top-2 right-2 bg-black text-white p-2 rounded-full hover:bg-white hover:text-black border border-black transition-all disabled:opacity-50"
+                  className="absolute top-2 right-2 bg-black text-white px-3 py-1 text-xs font-medium rounded-full hover:bg-white hover:text-black border border-black transition-all disabled:opacity-50"
                   title="Delete"
                 >
-                  🗑️
+                  Delete
                 </button>
               </div>
             ))}
