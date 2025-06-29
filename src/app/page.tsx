@@ -1,96 +1,3 @@
-// "use client";
-
-// import ImageUploader from "../components/ImageUploader";
-// import { useState } from "react";
-// import {
-//   useQuery,
-//   useMutation,
-//   useQueryClient,
-//   QueryClient,
-//   QueryClientProvider,
-// } from "@tanstack/react-query";
-// import { USER_ID } from "../constants";
-
-// function ImagesView() {
-//   const [viewImage, setViewImage] = useState<string | null>(null);
-//   const queryClient = useQueryClient();
-
-//   const { data, isLoading } = useQuery({
-//     queryKey: ["images", USER_ID],
-//     queryFn: async () => {
-//       const res = await fetch(`/api/images?userId=${USER_ID}`);
-//       const data = await res.json();
-//       return data.images || [];
-//     },
-//   });
-
-//   const deleteMutation = useMutation({
-//     mutationFn: async (key: string) => {
-//       await fetch("/api/images", {
-//         method: "DELETE",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ key }),
-//       });
-//     },
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ["images", USER_ID] });
-//     },
-//   });
-
-//   return (
-//     <div className="p-8">
-//       <h1 className="text-3xl font-bold mb-6">User Images</h1>
-//       <ImageUploader
-//         onUpload={() =>
-//           queryClient.invalidateQueries({ queryKey: ["images", USER_ID] })
-//         }
-//       />
-//       <h2 className="text-2xl font-semibold mt-8 mb-4">All Uploaded Images</h2>
-//       {isLoading && <p className="text-gray-600">Loading...</p>}
-//       <div className="flex flex-wrap gap-4">
-//         {data?.map((img: { url: string; key: string }) => (
-//           <div key={img.key} className="flex flex-col items-center">
-//             <img
-//               src={img.url}
-//               alt="Uploaded"
-//               className="max-w-[200px] cursor-pointer hover:opacity-80 transition-opacity"
-//               onClick={() => setViewImage(img.url)}
-//             />
-//             <button
-//               onClick={() => deleteMutation.mutate(img.key)}
-//               disabled={deleteMutation.isPending}
-//               className="mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
-//             >
-//               Delete
-//             </button>
-//           </div>
-//         ))}
-//       </div>
-//       {viewImage && (
-//         <div
-//           className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
-//           onClick={() => setViewImage(null)}
-//         >
-//           <img
-//             src={viewImage}
-//             alt="Enlarged"
-//             className="max-h-[90vh] max-w-[90vw] bg-white object-contain"
-//           />
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
-// const queryClient = new QueryClient();
-
-// export default function HomePage() {
-//   return (
-//     <QueryClientProvider client={queryClient}>
-//       <ImagesView />
-//     </QueryClientProvider>
-//   );
-// }
 "use client";
 
 import { useState } from "react";
@@ -106,9 +13,7 @@ export default function Page() {
     queryKey: ["images"],
     queryFn: async () => {
       const res = await fetch(`/api/images?userId=${USER_ID}`);
-      if (!res.ok) {
-        throw new Error("Failed to fetch images");
-      }
+      if (!res.ok) throw new Error("Failed to fetch images");
       return res.json();
     },
   });
@@ -118,9 +23,7 @@ export default function Page() {
       await fetch(`/api/images`, {
         method: "DELETE",
         body: JSON.stringify({ key }),
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
     },
     onSuccess: () => {
@@ -129,25 +32,25 @@ export default function Page() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-start px-4 py-10">
       <h1 className="text-3xl font-bold text-center mb-8">Image Upload App</h1>
 
-      <div className="mb-10">
+      <div className="w-full max-w-md mb-10">
         <ImageUploader onUpload={() => queryClient.invalidateQueries({ queryKey: ["images"] })} />
       </div>
 
-      <h2 className="text-2xl font-semibold mb-4">Your Uploaded Images</h2>
+      <div className="w-full max-w-4xl text-center">
+        <h2 className="text-2xl font-semibold mb-4">Your Uploaded Images</h2>
 
-      {isLoading ? (
-        <p className="text-gray-600">Loading...</p>
-      ) : isError ? (
-        <p className="text-red-600">Failed to load images.</p>
-      ) : Array.isArray(data) && data.length === 0 ? (
-        <p className="text-gray-500 italic">No images found.</p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {Array.isArray(data) &&
-            data.map((img: { url: string; key: string }) => (
+        {isLoading ? (
+          <p className="text-gray-600">Loading...</p>
+        ) : isError ? (
+          <p className="text-red-600">Failed to load images.</p>
+        ) : Array.isArray(data) && data.length === 0 ? (
+          <p className="text-gray-500 italic">No images found.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-center">
+            {data.map((img: { url: string; key: string }) => (
               <div
                 key={img.key}
                 className="relative bg-white rounded-xl shadow-md overflow-hidden group"
@@ -161,15 +64,16 @@ export default function Page() {
                 <button
                   onClick={() => deleteMutation.mutate(img.key)}
                   disabled={deleteMutation.isPending}
-                  className="absolute top-2 right-2 bg-red-500 p-2 rounded-full text-white hover:bg-red-600 transition-all disabled:opacity-50"
-                  title="Delete Image"
+                  className="absolute top-2 right-2 bg-black text-white p-2 rounded-full hover:bg-white hover:text-black border border-black transition-all disabled:opacity-50"
+                  title="Delete"
                 >
                   🗑️
                 </button>
               </div>
             ))}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
 
       {viewImage && (
         <div
@@ -186,4 +90,3 @@ export default function Page() {
     </div>
   );
 }
-
